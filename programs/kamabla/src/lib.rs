@@ -150,50 +150,7 @@ pub struct Deposit<'info> {
     pub token_program: Program<'info, Token>, // SPL token program
 }
 
-#[derive(Accounts)]
-pub struct ClaimToUser<'info> {
-    #[account(mut, seeds = [GLOBAL_SEED], bump)]
-    pub global_state: Account<'info, GlobalState>,
-    #[account(mut)]
-    pub mint: Box<Account<'info, Mint>>,
-    #[account(mut)]
-    pub user: Signer<'info>,
-    #[account(mut)]
-    pub global_state_token_account: Account<'info, TokenAccount>, // Pool's token account
-    #[account(mut)]
-    pub user_token_account: Account<'info, TokenAccount>, // User's token account
-    pub token_program: Program<'info, Token>, // SPL token program
-}
 
-#[derive(Accounts)]
-pub struct Withdraw<'info> {
-    #[account(mut, seeds = [GLOBAL_SEED], bump)]
-    pub global_state: Account<'info, GlobalState>,
-    #[account(mut)]
-    pub mint: Account<'info, Mint>,
-    #[account(
-        mut,
-        constraint = admin.key() == global_state.admin.key()
-    )]
-    pub admin: Signer<'info>,
-    #[account(mut)]
-    pub global_state_token_account: Account<'info, TokenAccount>, // Pool's token account
-
-    #[account(
-        mut,
-        constraint = admin_token_account.owner == admin.key()
-    )]
-    pub admin_token_account: Account<'info, TokenAccount>, // Admin's token account
-    pub token_program: Program<'info, Token>, // SPL token program
-}
-
-#[account]
-#[derive(Default)]
-pub struct GlobalState {
-    pub admin: Pubkey,
-    pub total_tokens: u64,
-    pub global_state_token_account: Pubkey,
-}
 
 // Define custom errors
 #[error_code]
